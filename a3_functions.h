@@ -2,7 +2,8 @@
    Student Name 	=
    Student Number	=
 */
-
+#ifndef __A3_FUNCTIONS_H__
+#define __A3_FUNCTIONS_H__
 #include "a3_nodes.h"
 
 /********** DON'T MODIFY **********/
@@ -99,4 +100,4 @@ user_t *read_CSV_and_create_users(FILE *file, int num_users);
 // Extra functions' Prototypes/Declarations go here
 
 
-
+#endif
