@@ -1,6 +1,6 @@
 /*****************
-    Student Name 	=
-    Student Number	=
+    Student Name 	= Jacob Hubbard
+    Student Number	= 101348462
 */
 
 #include <stdlib.h>

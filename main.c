@@ -1,6 +1,6 @@
 /********* main.c ********
-    Student Name 	=
-    Student Number	=
+    Student Name 	= Jacob Hubbard
+    Student Number	= 101348462
 */
 
 // Includes go here
