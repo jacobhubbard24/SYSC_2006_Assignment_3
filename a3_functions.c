@@ -25,59 +25,22 @@
 */
 user_t *add_user(user_t *users, const char *username, const char *password)
 {
-    char *username_lowered = malloc(strlen(username + 1));
-    assert(username_lowered);
-    strcpy(username_lowered, username);
-    convert_to_lower(username_lowered);
-    if (!users)
-    {
+    // Username already exists in list
+    // if (find_user(users, username))
+    // {
+    //     printf("ERROR: User provided already exists\n");
+    // }
+    // else
+    // {
         user_t* new_user = malloc(sizeof(user_t));
         assert(new_user);
         new_user->next = NULL;
-        for (int i = 0; i < strlen(username_lowered); i++)
-        {
-            new_user->username[i] = username_lowered[i];
-        }
-        new_user->username[strlen(username_lowered)] = '\0';
-        for (int i = 0; i < strlen(password); i++)
-        {
-            new_user->password[i] = password[i];
-        }
         new_user->friends = NULL;
         new_user->posts = NULL;
-        return new_user;
-    }
-    else if (find_user(users, username_lowered))
-    {
-        printf("ERROR: User provided already exists\n");
-    }
-    else
-    {
-        // Loop through the linked list of users
-        for (user_t *curr = users; curr->next; curr = curr->next)
-        {
-            if (strcmp(curr->next->username, username_lowered) > 0)
-            {
-                user_t* new_user = malloc(sizeof(user_t));
-                assert(new_user);
-                new_user->next = curr->next;
-                curr->next = new_user;
-                for (int i = 0; i < strlen(username_lowered); i++)
-                {
-                    new_user->username[i] = username_lowered[i];
-                }
-                for (int i = 0; i < strlen(password); i++)
-                {
-                    new_user->password[i] = password[i];
-                }
-                new_user->friends = NULL;
-                new_user->posts = NULL;
-            }
-        }
-        
-    }
-    free(username_lowered);
-    username_lowered = NULL;
+        strcpy(new_user->username, username);
+        strcpy(new_user->password, password);
+        users = insert_user(users, new_user);
+    // }
     return users;
 }
 
@@ -96,7 +59,6 @@ user_t *find_user(user_t *users, const char *username)
             {
                 return curr;
             }
-            else printf(" a ");
         }
     }
     return NULL;
@@ -272,4 +234,25 @@ void convert_to_lower(char *str)
         *str = tolower(*str);
         str++;
     }
+}
+
+user_t *insert_user(user_t *users, user_t *user_to_insert)
+{
+    if (!users)
+    {
+        return user_to_insert;
+    }
+    else
+    {
+        for (user_t *curr = users; curr; curr = curr->next)
+        {
+            if (strcmp)
+            if (strcmp(curr->next->username, user_to_insert->username) > 0 || curr->next == NULL)
+            {
+                user_to_insert->next = curr->next;
+                curr->next = user_to_insert;
+            }
+        }
+    }
+    return users;
 }

@@ -1,6 +1,6 @@
 /********* functions.h ********
-   Student Name 	=
-   Student Number	=
+   Student Name 	= Jacob Hubbard
+   Student Number	= 101348462
 */
 #ifndef __A3_FUNCTIONS_H__
 #define __A3_FUNCTIONS_H__
@@ -100,5 +100,6 @@ user_t *read_CSV_and_create_users(FILE *file, int num_users);
 // Extra functions' Prototypes/Declarations go here
 
 void convert_to_lower(char *str);
+user_t * insert_user(user_t *users, user_t *user_to_insert);
 
 #endif

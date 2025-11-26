@@ -22,6 +22,18 @@ int main()
     // Parse CSV data and create users
     user_t *users = read_CSV_and_create_users(csv_file, 50);
 
+    for (user_t *curr = users; curr; curr = curr->next)
+    {
+        if (!(users))
+        {
+            printf("NULL   ");
+        }
+        else
+        {
+            printf("%p   ", (users));
+        }
+        
+    }
     
     printf("Testing find_users\n");
     printf("Test 1: looking for arthurhermione\n");
