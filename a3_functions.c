@@ -9,7 +9,6 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <time.h>
-#include <ctype.h> // for tolower() function
 #include "a3_nodes.h"
 #include "a3_functions.h"
 
@@ -17,7 +16,9 @@
 
 #define USERNAME_MAX_LENGTH 32
 #define PASSWORD_MAX_LENGTH 17
+#define PASSWORD_MIN_LENGTH 8
 #define POST_MAX_LENGTH 252
+
 /*
    Function that creates a new user and adds it to a sorted (ascending order) linked list at
    the proper sorted location. Return the head of the list.
@@ -231,7 +232,10 @@ void convert_to_lower(char *str)
     }
     while (*str)
     {
-        *str = tolower(*str);
+        if (*str >= 'A' && *str <= 'Z') // If in A-Z
+        {
+            *str = *str + ('a' - 'A');// Add the ASCII difference between uppercase and lowercase
+        }
         str++;
     }
 }
@@ -249,26 +253,63 @@ user_t *insert_user(user_t *users, user_t *user_to_insert)
         {
             if (strcmp(curr->username, user_to_insert->username) > 0)
             {
+                
                 if (prev == NULL)
                 {
                     user_to_insert->next = users;
                     users = user_to_insert;
+                    return users;
                 }
                 else
                 {
                     prev->next = user_to_insert;
                     user_to_insert->next = curr;
+                    return users;
                 }
-                printf("%s\n", curr->username);
             }
             else if (curr->next == NULL)
             {
                 curr->next = user_to_insert;
                 user_to_insert->next = NULL;
-                printf("%s SKIBITY\n", curr->username);
+                return users;
             }
+            prev = curr;
         }
-        
     }
     return users;
+}
+
+
+void get_username(char *username, char *prompt)
+{
+    do
+    {
+        printf("%s", prompt);
+        fgets(username, USERNAME_MAX_LENGTH, stdin);
+    } while (!strstr(username, "\n"));
+    // Remove the newline character
+    char *newline = strchr(username, '\n');
+    *newline = '\0';
+    convert_to_lower(username);
+}
+
+void get_password(char *password)
+{
+    do
+    {
+        printf("Enter a password between 8-15 characters: ");
+        fgets(password, PASSWORD_MAX_LENGTH, stdin);
+    } while (!strstr(password, "\n") || strlen(password) < PASSWORD_MIN_LENGTH);
+    // Remove the newline character
+    char *newline = strchr(password, '\n');
+    *newline = '\0';
+}
+
+void check_password(char *password)
+{
+    printf("Enter the password: ");
+    fgets(password, PASSWORD_MAX_LENGTH, stdin);
+    // Remove the newline character
+    char *newline = strchr(password, '\n');
+    *newline = '\0';
 }

@@ -5,6 +5,7 @@
 #ifndef __A3_FUNCTIONS_H__
 #define __A3_FUNCTIONS_H__
 #include "a3_nodes.h"
+#include <stdbool.h>
 
 /********** DON'T MODIFY **********/
 /*
@@ -101,5 +102,8 @@ user_t *read_CSV_and_create_users(FILE *file, int num_users);
 
 void convert_to_lower(char *str);
 user_t * insert_user(user_t *users, user_t *user_to_insert);
+void get_username(char *username, char *prompt);
+void get_password(char *password);
+void check_password(char *password);
 
 #endif
