@@ -1,6 +1,6 @@
 /********* nodes.h ********
-    Student Name 	=
-    Student Number	=
+    Student Name 	= Jacob Hubbard
+    Student Number	= 101348462
 */
 
 #ifndef __A3_NODES_H__
@@ -22,8 +22,7 @@ typedef struct friend
 {
     char username[30];
     struct friend *next;
-}
-friend_t;
+} friend_t;
 
 // Structure to represent a linked list of a user's posts
 typedef struct post

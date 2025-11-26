@@ -99,5 +99,6 @@ user_t *read_CSV_and_create_users(FILE *file, int num_users);
 
 // Extra functions' Prototypes/Declarations go here
 
+void convert_to_lower(char *str);
 
 #endif
