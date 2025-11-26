@@ -24,13 +24,13 @@ int main()
 
     for (user_t *curr = users; curr; curr = curr->next)
     {
-        if (!(users))
+        if (!(curr))
         {
             printf("NULL   ");
         }
         else
         {
-            printf("%p   ", (users));
+            printf("%s   ", curr->username);
         }
         
     }
@@ -57,12 +57,23 @@ int main()
         printf("Passed!\n");
     }
     else printf("Failed\n");
-    printf("Test 2: adding SHREK. Should cause error\n");
-    users = add_user(users, "SHREK", "yomama");
+    printf("Test 2: adding shrek. Should cause error\n");
+    users = add_user(users, "shrek", "yomama");
     printf("Test 3: adding shrek. Should cause error\n");
     users = add_user(users, "shrek", "123");
     
-    
+    for (user_t *curr = users; curr; curr = curr->next)
+    {
+        if (!(curr))
+        {
+            printf("NULL   ");
+        }
+        else
+        {
+            printf("%s   ", curr->username);
+        }
+        
+    }
 
     fclose(csv_file);
  

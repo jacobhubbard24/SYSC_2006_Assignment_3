@@ -25,13 +25,13 @@
 */
 user_t *add_user(user_t *users, const char *username, const char *password)
 {
-    // Username already exists in list
-    // if (find_user(users, username))
-    // {
-    //     printf("ERROR: User provided already exists\n");
-    // }
-    // else
-    // {
+    //Username already exists in list
+    if (find_user(users, username))
+    {
+        printf("ERROR: User provided already exists\n");
+    }
+    else
+    {
         user_t* new_user = malloc(sizeof(user_t));
         assert(new_user);
         new_user->next = NULL;
@@ -40,7 +40,7 @@ user_t *add_user(user_t *users, const char *username, const char *password)
         strcpy(new_user->username, username);
         strcpy(new_user->password, password);
         users = insert_user(users, new_user);
-    // }
+    }
     return users;
 }
 
@@ -244,15 +244,31 @@ user_t *insert_user(user_t *users, user_t *user_to_insert)
     }
     else
     {
+        user_t *prev = NULL;
         for (user_t *curr = users; curr; curr = curr->next)
         {
-            if (strcmp)
-            if (strcmp(curr->next->username, user_to_insert->username) > 0 || curr->next == NULL)
+            if (strcmp(curr->username, user_to_insert->username) > 0)
             {
-                user_to_insert->next = curr->next;
+                if (prev == NULL)
+                {
+                    user_to_insert->next = users;
+                    users = user_to_insert;
+                }
+                else
+                {
+                    prev->next = user_to_insert;
+                    user_to_insert->next = curr;
+                }
+                printf("%s\n", curr->username);
+            }
+            else if (curr->next == NULL)
+            {
                 curr->next = user_to_insert;
+                user_to_insert->next = NULL;
+                printf("%s SKIBITY\n", curr->username);
             }
         }
+        
     }
     return users;
 }
