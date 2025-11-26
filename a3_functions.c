@@ -94,7 +94,6 @@ user_t *find_user(user_t *users, const char *username)
         {
             if (strcmp(curr->username, username) == 0)
             {
-                printf("THIS IS HAPPENING\n");
                 return curr;
             }
             else printf(" a ");
