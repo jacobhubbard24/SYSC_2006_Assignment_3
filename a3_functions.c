@@ -72,7 +72,11 @@ user_t *find_user(user_t *users, const char *username)
 */
 friend_t *create_friend(const char *username)
 {
-
+    friend_t *new_friend = malloc(sizeof(friend_t));
+    assert(new_friend);
+    new_friend->next = NULL;
+    strcpy(new_friend->username, username);
+    return new_friend;
 }
 
 
@@ -82,7 +86,34 @@ friend_t *create_friend(const char *username)
 */
 void add_friend(user_t *user, const char *friend)
 {
-
+    friend_t *new_friend = create_friend(friend);
+    friend_t *prev = NULL;
+    for (friend_t *curr = user->friends; curr; curr = curr->next)
+    {
+        if (strcmp(curr->username, new_friend->username) > 0)
+        {
+            
+            if (prev == NULL)
+            {
+                new_friend->next = user->friends;
+                user->friends = new_friend;
+                return;
+            }
+            else
+            {
+                prev->next = new_friend;
+                new_friend->next = curr;
+                return;
+            }
+        }
+        else if (curr->next == NULL)
+        {
+            curr->next = new_friend;
+            new_friend->next = NULL;
+            return;
+        }
+        prev = curr;
+    }
 }
 
 /*
@@ -91,7 +122,19 @@ void add_friend(user_t *user, const char *friend)
 */
 _Bool delete_friend(user_t *user, char *friend_name)
 {
-
+    friend_t *prev = NULL;
+    for (friend_t *curr = user->friends; curr; curr = curr->next)
+    {
+        if (strcmp(friend_name, curr->username) == 0)
+        {
+            prev->next = curr->next;
+            free(curr);
+            curr = NULL;
+            return true;
+        }
+        prev = curr;
+    }
+    return false;
 }
 
 /*
@@ -134,7 +177,16 @@ void display_all_user_posts(user_t *user)
 */
 void display_user_friends(user_t *user)
 {
-
+    if (user)
+    {
+        int i = 1;
+        printf("List of %s's friends:\n", user->username);
+        for (friend_t *curr = user->friends; curr; curr = curr->next, i++)
+        {
+            printf("%d- %s\n", i, curr->username);
+        }
+    }
+    else printf("User does not exist.\n");
 }
 
 /*
@@ -299,7 +351,7 @@ void get_password(char *password)
     {
         printf("Enter a password between 8-15 characters: ");
         fgets(password, PASSWORD_MAX_LENGTH, stdin);
-    } while (!strstr(password, "\n") || strlen(password) < PASSWORD_MIN_LENGTH);
+    } while (!strstr(password, "\n") || (strlen(password) - 1) < PASSWORD_MIN_LENGTH); // strlen(password) - 1 to account for the newline character
     // Remove the newline character
     char *newline = strchr(password, '\n');
     *newline = '\0';

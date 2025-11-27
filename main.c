@@ -88,6 +88,12 @@ int main()
                     if (strcmp(password, find_user(users, username)->password) == 0)
                     {
                         get_password(password);
+                        strcpy(find_user(users, username)->password, password); 
+                        printf("Password updated successfully!\n");
+                    }
+                    else
+                    {
+                        printf("------------------------------------------\n           Password incorrect.\n------------------------------------------\n");
                     }
                 }
                 else
@@ -96,6 +102,8 @@ int main()
                 }
                 break;
             case 3:
+                
+
                 break;
             case 4:
                 break;
@@ -123,6 +131,4 @@ int main()
     } while (user_choice != 6);
 
     fclose(csv_file);
- 
-
 }
