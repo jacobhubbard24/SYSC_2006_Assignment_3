@@ -26,6 +26,7 @@ install_manifest.txt
 # --- IDE / editor metadata ---
 .vscode/
 .idea/
+.clangd/
 
 # --- OS junk ---
 .DS_store

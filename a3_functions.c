@@ -3,6 +3,7 @@
     Student Number	= 101348462
 */
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -143,7 +144,11 @@ _Bool delete_friend(user_t *user, char *friend_name)
 */
 post_t *create_post(const char *text)
 {
-
+    post_t *new_post = malloc(sizeof(post_t));
+    assert(new_post);
+    strcpy(new_post->content, text);
+    new_post->next = NULL;
+    return new_post;
 }
 
 /*
@@ -151,7 +156,9 @@ post_t *create_post(const char *text)
 */
 void add_post(user_t *user, const char *text)
 {
-
+    post_t *new_post = create_post(text);
+    new_post->next = user->posts;
+    user->posts = new_post;
 }
 
 /*
@@ -160,7 +167,14 @@ void add_post(user_t *user, const char *text)
 */
 _Bool delete_post(user_t *user)
 {
-
+    if (user->posts)
+    {
+        post_t *temp = user->posts;
+        user->posts = user->posts->next;
+        free(temp);
+        temp = NULL;
+    }
+    return false;
 }
 
 /*
@@ -168,7 +182,11 @@ _Bool delete_post(user_t *user)
 */
 void display_all_user_posts(user_t *user)
 {
-
+    int i = 1;
+    for (post_t *curr = user->posts; curr; curr = curr->next)
+    {
+        printf("%d- %s\n", i, curr->content);
+    }
 }
 
 
@@ -197,7 +215,18 @@ void display_user_friends(user_t *user)
 */
 void display_posts_by_n(user_t *users, int number)
 {
-
+    post_t *curr = users->posts;
+    for (int i = 1; i <= number; i++)
+    {
+        if (curr)
+        {
+            printf("%d- %s\n", i, curr->content);
+        }
+        else 
+        {
+            i = number + 1; // End the loop if no more posts available
+        }
+    }
 }
 
 /*
@@ -205,7 +234,51 @@ void display_posts_by_n(user_t *users, int number)
 */
 void teardown(user_t *users)
 {
-
+    user_t *prev_user = NULL;
+    for (user_t *curr = users; curr; curr = curr->next)
+    {
+        if (prev_user)
+        {
+            free(prev_user);
+            prev_user = NULL;
+        }
+        friend_t * prev_friend = NULL;
+        for (friend_t *curr_friend = curr->friends; curr_friend; curr_friend = curr_friend->next)
+        {
+            if (prev_friend)
+            {
+                free(prev_friend);
+                prev_friend = NULL;
+                if (!curr_friend->next)
+                {
+                    free(curr_friend);
+                    curr_friend = NULL;
+                }
+            }
+            prev_friend = curr_friend;
+        }
+        post_t *prev_post = NULL;
+        for (post_t *curr_post = curr->posts; curr_post; curr_post = curr_post->next)
+        {
+            if (prev_post)
+            {
+                free(prev_post);
+                prev_post = NULL;
+                if (!curr_post->next)
+                {
+                    free(curr_post);
+                    curr_post = NULL;
+                }
+            }
+            prev_post = curr_post;
+        }
+        if (!curr->next)
+        {
+            free (curr);
+            curr = NULL;
+        }
+        prev_user = curr;
+    }
 }
 
 /*

@@ -6,6 +6,7 @@
 #define __A3_FUNCTIONS_H__
 #include "a3_nodes.h"
 #include <stdbool.h>
+#include <stdio.h>
 
 /********** DON'T MODIFY **********/
 /*
