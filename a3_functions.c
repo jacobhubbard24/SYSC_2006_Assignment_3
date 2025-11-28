@@ -182,11 +182,15 @@ _Bool delete_post(user_t *user)
 */
 void display_all_user_posts(user_t *user)
 {
+    printf("------------------------------------------\n             %s's posts.\n------------------------------------------\n", user->username);
+
     int i = 1;
     for (post_t *curr = user->posts; curr; curr = curr->next)
     {
         printf("%d- %s\n", i, curr->content);
     }
+    printf("------------------------------------------\n");
+
 }
 
 
@@ -213,14 +217,14 @@ void display_user_friends(user_t *user)
    more posts.
    If there are no more post or the user types “n” or “N”, the function returns. 
 */
-void display_posts_by_n(user_t *users, int number)
+void display_posts_by_n(user_t *user, int number)
 {
-    post_t *curr = users->posts;
+    post_t *curr = user->posts;
     for (int i = 1; i <= number; i++)
     {
-        if (curr)
+        if (curr + i)
         {
-            printf("%d- %s\n", i, curr->content);
+            printf("%d- %s\n", i, (curr + i)->content);
         }
         else 
         {
@@ -234,50 +238,23 @@ void display_posts_by_n(user_t *users, int number)
 */
 void teardown(user_t *users)
 {
-    user_t *prev_user = NULL;
-    for (user_t *curr = users; curr; curr = curr->next)
+    // Free all users
+    while (users)
     {
-        if (prev_user)
+        user_t *next = users->next;
+
+        // Free all friends of each user
+        while (users->friends)
         {
-            free(prev_user);
-            prev_user = NULL;
+            delete_friend(users, users->username);
         }
-        friend_t * prev_friend = NULL;
-        for (friend_t *curr_friend = curr->friends; curr_friend; curr_friend = curr_friend->next)
+        // Free all posts of each user
+        while (users->posts)
         {
-            if (prev_friend)
-            {
-                free(prev_friend);
-                prev_friend = NULL;
-                if (!curr_friend->next)
-                {
-                    free(curr_friend);
-                    curr_friend = NULL;
-                }
-            }
-            prev_friend = curr_friend;
+            delete_post(users);
         }
-        post_t *prev_post = NULL;
-        for (post_t *curr_post = curr->posts; curr_post; curr_post = curr_post->next)
-        {
-            if (prev_post)
-            {
-                free(prev_post);
-                prev_post = NULL;
-                if (!curr_post->next)
-                {
-                    free(curr_post);
-                    curr_post = NULL;
-                }
-            }
-            prev_post = curr_post;
-        }
-        if (!curr->next)
-        {
-            free (curr);
-            curr = NULL;
-        }
-        prev_user = curr;
+        free(users);
+        users = next;
     }
 }
 
@@ -291,9 +268,9 @@ void print_menu()
     printf("***********************************************\n");
     printf("1. Register a new user\n");
     printf("2. Manage a user's profile (change password)\n");
-    printf("2. Manage a user's posts (add/remove)\n");
-    printf("2. Manage a user's friends (add/remove)\n");
-    printf("2. Display a user's posts\n");
+    printf("3. Manage a user's posts (add/remove)\n");
+    printf("4. Manage a user's friends (add/remove)\n");
+    printf("5. Display a user's posts\n");
     printf("6. Exit\n\n");
     printf("Enter your choice:\n");
 }
@@ -437,4 +414,16 @@ void check_password(char *password)
     // Remove the newline character
     char *newline = strchr(password, '\n');
     *newline = '\0';
+}
+
+void get_post(char *post)
+{
+    printf("Enter your post content: ");
+    scanf(" %[^\n]s", post);
+}
+
+void get_friend(char *friend, char *prompt)
+{
+    printf("%s", prompt);
+    scanf("%s", friend);
 }

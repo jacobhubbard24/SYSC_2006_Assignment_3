@@ -106,5 +106,7 @@ user_t * insert_user(user_t *users, user_t *user_to_insert);
 void get_username(char *username, char *prompt);
 void get_password(char *password);
 void check_password(char *password);
+void get_post(char *post);
+void get_friend(char *friend, char *prompt);
 
 #endif
