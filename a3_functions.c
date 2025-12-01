@@ -19,6 +19,7 @@
 #define PASSWORD_MAX_LENGTH 17
 #define PASSWORD_MIN_LENGTH 8
 #define POST_MAX_LENGTH 252
+#define USER_CHOICE_YN_MAX_LENGTH 2
 
 /*
    Function that creates a new user and adds it to a sorted (ascending order) linked list at
@@ -27,22 +28,14 @@
 */
 user_t *add_user(user_t *users, const char *username, const char *password)
 {
-    //Username already exists in list
-    if (find_user(users, username))
-    {
-        printf("ERROR: User provided already exists\n");
-    }
-    else
-    {
-        user_t* new_user = malloc(sizeof(user_t));
-        assert(new_user);
-        new_user->next = NULL;
-        new_user->friends = NULL;
-        new_user->posts = NULL;
-        strcpy(new_user->username, username);
-        strcpy(new_user->password, password);
-        users = insert_user(users, new_user);
-    }
+    user_t* new_user = malloc(sizeof(user_t));
+    assert(new_user);
+    new_user->next = NULL;
+    new_user->friends = NULL;
+    new_user->posts = NULL;
+    strcpy(new_user->username, username);
+    strcpy(new_user->password, password);
+    users = insert_user(users, new_user);
     return users;
 }
 
@@ -173,6 +166,7 @@ _Bool delete_post(user_t *user)
         user->posts = user->posts->next;
         free(temp);
         temp = NULL;
+        return true;
     }
     return false;
 }
@@ -182,10 +176,10 @@ _Bool delete_post(user_t *user)
 */
 void display_all_user_posts(user_t *user)
 {
-    printf("------------------------------------------\n             %s's posts.\n------------------------------------------\n", user->username);
+    printf("------------------------------------------\n             %s's posts:\n------------------------------------------\n", user->username);
 
     int i = 1;
-    for (post_t *curr = user->posts; curr; curr = curr->next)
+    for (post_t *curr = user->posts; curr; curr = curr->next, i++)
     {
         printf("%d- %s\n", i, curr->content);
     }
@@ -219,18 +213,40 @@ void display_user_friends(user_t *user)
 */
 void display_posts_by_n(user_t *user, int number)
 {
+    int count = 1;
+    int max = number;
+    char user_choice_yn[USER_CHOICE_YN_MAX_LENGTH];
     post_t *curr = user->posts;
-    for (int i = 1; i <= number; i++)
+    for (; curr && count <= max; curr = curr->next, count++)
     {
-        if (curr + i)
+        printf("%d- %s\n", count, curr->content);
+    }
+    do 
+    {
+        max += number;
+        if (curr) // Only display if possible
         {
-            printf("%d- %s\n", i, (curr + i)->content);
+            if (strcmp("y", user_choice_yn) == 0)
+            {
+                for (curr; curr && count <= max; curr = curr->next, count++)
+                {
+                    printf("%d- %s\n", count, curr->content);
+                }
+            }
+            
+        }
+        if (curr) // handle if there are no more posts after displaying, and since curr has changed from prevoius displaying.
+        {
+            printf("Enter whether you would like to display more posts (Y/N): ");
+            scanf("%s", user_choice_yn);
+            convert_to_lower(user_choice_yn);
         }
         else 
         {
-            i = number + 1; // End the loop if no more posts available
+            printf("------------------------------------------\n      All posts have been displayed.\n------------------------------------------\n");
+            strcpy(user_choice_yn, "n");
         }
-    }
+    } while (strcmp("n", user_choice_yn) != 0);
 }
 
 /*
