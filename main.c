@@ -144,7 +144,7 @@ int main()
                                 get_friend(friend, "Enter a friend's name to delete: ");
                                 if (delete_friend(find_user(users, username), friend))
                                 {
-                                    user_choice_friends = 3;
+                                    display_user_friends(find_user(users,username));
                                 }
                                 break;
                             default:
@@ -172,7 +172,7 @@ int main()
         }
     } while (user_choice != 6);
 
-    printf("\nGoodbye!\n");
     teardown(users);
+    printf("\nGoodbye!\n");
     fclose(csv_file);
 }

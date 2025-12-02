@@ -81,33 +81,41 @@ friend_t *create_friend(const char *username)
 void add_friend(user_t *user, const char *friend)
 {
     friend_t *new_friend = create_friend(friend);
-    friend_t *prev = NULL;
-    for (friend_t *curr = user->friends; curr; curr = curr->next)
+    if (!user->friends)
     {
-        if (strcmp(curr->username, new_friend->username) > 0)
-        {
-            
-            if (prev == NULL)
-            {
-                new_friend->next = user->friends;
-                user->friends = new_friend;
-                return;
-            }
-            else
-            {
-                prev->next = new_friend;
-                new_friend->next = curr;
-                return;
-            }
-        }
-        else if (curr->next == NULL)
-        {
-            curr->next = new_friend;
-            new_friend->next = NULL;
-            return;
-        }
-        prev = curr;
+        user->friends = new_friend;
     }
+    else
+    {
+        friend_t *prev = NULL;
+        for (friend_t *curr = user->friends; curr; curr = curr->next)
+        {
+            if (strcmp(curr->username, new_friend->username) > 0)
+            {
+                
+                if (prev == NULL)
+                {
+                    new_friend->next = user->friends;
+                    user->friends = new_friend;
+                    return;
+                }
+                else
+                {
+                    prev->next = new_friend;
+                    new_friend->next = curr;
+                    return;
+                }
+            }
+            else if (curr->next == NULL)
+            {
+                curr->next = new_friend;
+                new_friend->next = NULL;
+                return;
+            }
+            prev = curr;
+        }
+        }
+    
 }
 
 /*
@@ -119,6 +127,13 @@ _Bool delete_friend(user_t *user, char *friend_name)
     friend_t *prev = NULL;
     for (friend_t *curr = user->friends; curr; curr = curr->next)
     {
+        if (!prev && strcmp(friend_name, curr->username) == 0)
+        {
+            user->friends = curr->next;
+            free(curr);
+            curr = NULL;
+            return true;            
+        }
         if (strcmp(friend_name, curr->username) == 0)
         {
             prev->next = curr->next;
@@ -262,7 +277,7 @@ void teardown(user_t *users)
         // Free all friends of each user
         while (users->friends)
         {
-            delete_friend(users, users->username);
+            delete_friend(users, users->friends->username);
         }
         // Free all posts of each user
         while (users->posts)
