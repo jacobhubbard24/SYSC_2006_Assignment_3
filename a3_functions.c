@@ -232,36 +232,43 @@ void display_posts_by_n(user_t *user, int number)
     int max = number;
     char user_choice_yn[USER_CHOICE_YN_MAX_LENGTH];
     post_t *curr = user->posts;
-    for (; curr && count <= max; curr = curr->next, count++)
+    if (!curr)
     {
-        printf("%d- %s\n", count, curr->content);
+         printf("------------------------------------------\n          No posts to diplay.\n------------------------------------------\n");
     }
-    do 
+    else
     {
-        max += number;
-        if (curr) // Only display if possible
+        for (; curr && count <= max; curr = curr->next, count++)
         {
-            if (strcmp("y", user_choice_yn) == 0)
+            printf("%d- %s\n", count, curr->content);
+        }
+        do 
+        {
+            max += number;
+            if (curr) // Only display if possible
             {
-                for (curr; curr && count <= max; curr = curr->next, count++)
+                if (strcmp("y", user_choice_yn) == 0)
                 {
-                    printf("%d- %s\n", count, curr->content);
+                    for (; curr && count <= max; curr = curr->next, count++)
+                    {
+                        printf("%d- %s\n", count, curr->content);
+                    }
                 }
+                
             }
-            
-        }
-        if (curr) // handle if there are no more posts after displaying, and since curr has changed from prevoius displaying.
-        {
-            printf("Enter whether you would like to display more posts (Y/N): ");
-            scanf("%s", user_choice_yn);
-            convert_to_lower(user_choice_yn);
-        }
-        else 
-        {
-            printf("------------------------------------------\n      All posts have been displayed.\n------------------------------------------\n");
-            strcpy(user_choice_yn, "n");
-        }
-    } while (strcmp("n", user_choice_yn) != 0);
+            if (curr) // handle if there are no more posts after displaying, since curr has changed from prevoius displaying.
+            {
+                printf("Enter whether you would like to display more posts (Y/N): ");
+                scanf("%s", user_choice_yn);
+                convert_to_lower(user_choice_yn);
+            }
+            else 
+            {
+                printf("------------------------------------------\n      All posts have been displayed.\n------------------------------------------\n");
+                strcpy(user_choice_yn, "n");
+            }
+        } while (strcmp("n", user_choice_yn) != 0);
+    }
 }
 
 /*

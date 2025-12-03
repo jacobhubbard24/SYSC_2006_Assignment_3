@@ -14,7 +14,7 @@
 #define USERNAME_MAX_LENGTH 32
 #define PASSWORD_MAX_LENGTH 17
 #define POST_MAX_LENGTH 252
-#define NUM_POSTS_DISPLAYED_INITIALLY 3
+#define NUM_POSTS_DISPLAYED 3
 
 int main()
 {
@@ -55,7 +55,6 @@ int main()
                 {
                     printf("------------------------------------------\n           User already exists.\n------------------------------------------\n");
                 }
-                
                 break;
             case 2:
                 get_username(username, "Enter a username to update their password: ");
@@ -85,7 +84,7 @@ int main()
                     int user_choice_posts = 0;
                     do 
                     {
-                        printf("------------------------------------------\n          Managing %s's posts.\n------------------------------------------\n", username);
+                        printf("------------------------------------------\n    Managing %s's posts.\n------------------------------------------\n", username);
                         // Display note if the user has no posts
                         if (!find_user(users, username)->posts)
                         {
@@ -117,6 +116,10 @@ int main()
                         }
                     }while (user_choice_posts != 3);                    
                 }
+                else
+                {
+                    printf("------------------------------------------\n             User not found.\n------------------------------------------\n");
+                }
                 break;
             case 4:
                 get_username(username, "Enter a username to update their friends: ");
@@ -125,7 +128,7 @@ int main()
                     int user_choice_friends = 0;
                     do 
                     {
-                        printf("------------------------------------------\n          Managing %s's Friends.\n------------------------------------------\n", username);
+                        printf("------------------------------------------\n    Managing %s's Friends.\n------------------------------------------\n", username);
                         // Display note if the user has no friends
                         if (!find_user(users, username)->friends)
                         {
@@ -152,14 +155,18 @@ int main()
                         }
                     }while (user_choice_friends != 3);
                 }
+                else
+                {
+                    printf("------------------------------------------\n             User not found.\n------------------------------------------\n");
+                }
                 break;
             case 5:
                 get_username(username, "Enter a username to display their posts: ");
                 if (find_user(users, username))
                 {
-                    display_posts_by_n(find_user(users, username), NUM_POSTS_DISPLAYED_INITIALLY);                    
+                    display_posts_by_n(find_user(users, username), NUM_POSTS_DISPLAYED);                    
                 }
-                else 
+                else
                 {
                     printf("------------------------------------------\n             User not found.\n------------------------------------------\n");
                 }
